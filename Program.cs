@@ -11,6 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 //Add Context
 builder.Services.AddDbContext<DBContext>(option => 
 {
@@ -18,6 +19,10 @@ builder.Services.AddDbContext<DBContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("cadenaSQL"));
 
 });
+
+//AutoMapper
+builder.Services.AddAutoMapper(typeof(Program));
+
 var app = builder.Build();
 
 

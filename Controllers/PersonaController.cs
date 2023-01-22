@@ -1,8 +1,11 @@
-﻿using CRUDPersonas.Entities;
+﻿using AutoMapper;
+using CRUDPersonas.DTOs;
+using CRUDPersonas.Entities;
 using CRUDPersonas.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace CRUDPersonas.Controllers
 {
@@ -11,9 +14,12 @@ namespace CRUDPersonas.Controllers
     public class PersonaController : ControllerBase
     {
         private readonly DBContext _context;
-        public PersonaController(DBContext context)
+        private readonly IMapper _mapper;
+
+        public PersonaController(DBContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -22,7 +28,9 @@ namespace CRUDPersonas.Controllers
             try
             {
                 var listPersonas = await _context.Personas.ToListAsync();
-                return Ok(listPersonas);
+                var listPersonaDto = _mapper.Map<IEnumerable<PersonaDTO>>(listPersonas);
+
+                return Ok(listPersonaDto);
             }
             catch (Exception ex)
             {
@@ -42,7 +50,10 @@ namespace CRUDPersonas.Controllers
                 {
                     return NotFound();
                 }
-                return Ok(persona);
+
+                var personaDto = _mapper.Map<PersonaDTO>(persona);
+
+                return Ok(personaDto);
             }
             catch (Exception ex)
             {
@@ -77,9 +88,10 @@ namespace CRUDPersonas.Controllers
         {
             try
             {
+                
                 _context.Add(persona);
                 await _context.SaveChangesAsync();
-                return CreatedAtAction("Get", new { id = persona.PersonaId }, persona );
+                return CreatedAtAction("Get", new { id = persona.PersonaId }, persona);
             }
             catch (Exception ex)
             {
