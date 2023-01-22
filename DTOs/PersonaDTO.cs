@@ -4,6 +4,7 @@ namespace CRUDPersonas.DTOs
 {
     public class PersonaDTO
     {
+        public int PersonaId { get; set; }
         [Required(ErrorMessage = "El campo {0} es requerido")]
         [StringLength(maximumLength: 50, ErrorMessage = "El campo {0} no debe tener más de {1} caracteres")]
         public string? CiPersona { get; set; }

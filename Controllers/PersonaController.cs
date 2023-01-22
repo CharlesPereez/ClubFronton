@@ -84,14 +84,18 @@ namespace CRUDPersonas.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Persona persona)
+        public async Task<IActionResult> Post(PersonaDTO personaDto)
         {
             try
             {
+                var persona = _mapper.Map<Persona>(personaDto);
                 
                 _context.Add(persona);
                 await _context.SaveChangesAsync();
-                return CreatedAtAction("Get", new { id = persona.PersonaId }, persona);
+
+                var personaItemDto = _mapper.Map<PersonaDTO>(persona);
+
+                return CreatedAtAction("Get", new { id = personaItemDto.PersonaId }, personaItemDto);
             }
             catch (Exception ex)
             {
@@ -101,10 +105,13 @@ namespace CRUDPersonas.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Persona persona)
+        public async Task<IActionResult> Put(int id, PersonaDTO personaDto)
         {
             try
             {
+                var persona = _mapper.Map<Persona>(personaDto);
+
+
                 if (id != persona.PersonaId)
                 {
                     return BadRequest();
@@ -121,13 +128,13 @@ namespace CRUDPersonas.Controllers
                 personaItem.CiPersona = persona.CiPersona;
                 personaItem.Nombres = persona.Nombres;
                 personaItem.Apellidos = persona.Apellidos;
-                personaItem.Genero= persona.Genero;
+                personaItem.Genero = persona.Genero;
                 personaItem.FechaNacimiento = persona.FechaNacimiento;
                 personaItem.Direccion= persona.Direccion;
 
                 await _context.SaveChangesAsync();
 
-                return Ok(personaItem);
+                return NoContent();
             }
             catch (Exception ex)
             {
