@@ -13,6 +13,8 @@ namespace CRUDPersonas.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+
     public class PersonaController : ControllerBase
     {
         private readonly DBContext _context;
@@ -27,7 +29,7 @@ namespace CRUDPersonas.Controllers
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [AllowAnonymous]
         public async Task<IActionResult> Get()
         {
             try

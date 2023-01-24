@@ -1,7 +1,6 @@
 ﻿using CRUDPersonas.DTOs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -15,12 +14,15 @@ namespace CRUDPersonas.Controllers
     {
         private readonly UserManager<IdentityUser> userManager;
         private readonly IConfiguration configuration;
+        private readonly SignInManager<IdentityUser> signInManager;
 
         public CuentasController(UserManager<IdentityUser> userManager,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            SignInManager<IdentityUser> signInManager)
         {
             this.userManager = userManager;
             this.configuration = configuration;
+            this.signInManager = signInManager;
         }
 
 
@@ -37,6 +39,23 @@ namespace CRUDPersonas.Controllers
 
             return BadRequest(resultado.Errors);
         }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<RespuestaAutenticacion>> Login(CredencialesUsuario credencialesUsuario)
+        {
+            var resultado = await signInManager.PasswordSignInAsync(
+                credencialesUsuario.Usuario, 
+                credencialesUsuario.Password, 
+                isPersistent: false, 
+                lockoutOnFailure: false);
+
+            if (resultado.Succeeded)
+            {
+                return ConstruirToken(credencialesUsuario);
+            }
+            return BadRequest("Login Incorrecto");
+        }
+
         private RespuestaAutenticacion ConstruirToken(CredencialesUsuario credencialesUsuario)
         {
             var claims = new List<Claim>()
