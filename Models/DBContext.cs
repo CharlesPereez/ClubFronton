@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using CRUDPersonas.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace CRUDPersonas.Models
 {
-    public partial class DBContext : DbContext
+    public partial class DBContext : IdentityDbContext
     {
         public DBContext()
         {
@@ -16,27 +17,10 @@ namespace CRUDPersonas.Models
             : base(options)
         {
         }
-
-        public virtual DbSet<Cancha> Canchas { get; set; } = null!;
-        public virtual DbSet<Categoria> Categoria { get; set; } = null!;
-        public virtual DbSet<Cliente> Clientes { get; set; } = null!;
-        public virtual DbSet<Empleado> Empleados { get; set; } = null!;
-        public virtual DbSet<EstadoHorario> EstadoHorarios { get; set; } = null!;
-        public virtual DbSet<EstadoReserva> EstadoReservas { get; set; } = null!;
-        public virtual DbSet<Horario> Horarios { get; set; } = null!;
-        public virtual DbSet<Persona> Personas { get; set; } = null!;
-        public virtual DbSet<Producto> Productos { get; set; } = null!;
-        public virtual DbSet<Proveedor> Proveedors { get; set; } = null!;
-        public virtual DbSet<Reserva> Reservas { get; set; } = null!;
-        public virtual DbSet<ReservaVenta> ReservaVenta { get; set; } = null!;
-        public virtual DbSet<Rol> Rols { get; set; } = null!;
-        public virtual DbSet<VentaProducto> VentaProductos { get; set; } = null!;
-        public virtual DbSet<Venta> Venta { get; set; } = null!;
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder){ }    
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Cancha>(entity =>
             {
                 entity.ToTable("cancha");
@@ -412,6 +396,25 @@ namespace CRUDPersonas.Models
 
             OnModelCreatingPartial(modelBuilder);
         }
+
+        public virtual DbSet<Cancha> Canchas { get; set; } = null!;
+        public virtual DbSet<Categoria> Categoria { get; set; } = null!;
+        public virtual DbSet<Cliente> Clientes { get; set; } = null!;
+        public virtual DbSet<Empleado> Empleados { get; set; } = null!;
+        public virtual DbSet<EstadoHorario> EstadoHorarios { get; set; } = null!;
+        public virtual DbSet<EstadoReserva> EstadoReservas { get; set; } = null!;
+        public virtual DbSet<Horario> Horarios { get; set; } = null!;
+        public virtual DbSet<Persona> Personas { get; set; } = null!;
+        public virtual DbSet<Producto> Productos { get; set; } = null!;
+        public virtual DbSet<Proveedor> Proveedors { get; set; } = null!;
+        public virtual DbSet<Reserva> Reservas { get; set; } = null!;
+        public virtual DbSet<ReservaVenta> ReservaVenta { get; set; } = null!;
+        public virtual DbSet<Rol> Rols { get; set; } = null!;
+        public virtual DbSet<VentaProducto> VentaProductos { get; set; } = null!;
+        public virtual DbSet<Venta> Venta { get; set; } = null!;
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder){ }    
+
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }

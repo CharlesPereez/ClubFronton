@@ -2,6 +2,8 @@
 using CRUDPersonas.DTOs;
 using CRUDPersonas.Entities;
 using CRUDPersonas.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,14 +17,17 @@ namespace CRUDPersonas.Controllers
     {
         private readonly DBContext _context;
         private readonly IMapper _mapper;
+        
 
         public PersonaController(DBContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
+            
         }
 
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Get()
         {
             try

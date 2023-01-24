@@ -1,5 +1,7 @@
 
 using CRUDPersonas.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,8 +22,15 @@ builder.Services.AddDbContext<DBContext>(option =>
 
 });
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
+
 //AutoMapper
 builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<DBContext>()
+    .AddDefaultTokenProviders();
+
+
 
 var app = builder.Build();
 
