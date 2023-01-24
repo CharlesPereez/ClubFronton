@@ -65,10 +65,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 //AutoMapper
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<DBContext>()
+    .AddEntityFrameworkStores<DbContext>()
     .AddDefaultTokenProviders();
 
-
+builder.Services.AddAuthorization(option =>
+{
+    option.AddPolicy("EsAdmin", politica => politica.RequireClaim("esAdmin"));
+    option.AddPolicy("EnVendedor", politica => politica.RequireClaim("esVendedor"));
+});
 
 var app = builder.Build();
 

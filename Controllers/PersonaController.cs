@@ -11,9 +11,9 @@ using System.Net;
 
 namespace CRUDPersonas.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Route("api/persona")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "EsAdmin")]
 
     public class PersonaController : ControllerBase
     {
